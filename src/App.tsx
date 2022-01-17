@@ -1,18 +1,21 @@
 import serverConfig from "./config/config.json";
 
 import ReconnectingWebSocket from "reconnecting-websocket";
-import { useEffect, useState } from "react";
+import { Children, useEffect, useState } from "react";
+
+import { Link, Routes, Route, BrowserRouter } from "react-router-dom";
+
+const socket: ReconnectingWebSocket = new ReconnectingWebSocket(serverConfig.webSocketServer);
 
 export default function App() {
 
-    const socket: ReconnectingWebSocket = new ReconnectingWebSocket(serverConfig.webSocketServer);
 
     useEffect((): any => {
     
         socket.onopen = () => {
             console.log("Successfully Connected");
             console.log("connected");
-            socket.send("Example message.");
+            socket.send("SEND CONNECTION TEST");
         };
         socket.onclose = event => {
             console.log("Socket Closed Connection: ", event);
@@ -34,7 +37,16 @@ export default function App() {
 
     return (
         <div>
-
+            <BrowserRouter>
+                <div id="top">
+                    <Link to="/" className="topLink">SETUP</Link>
+                    <Link to="/" className="topLink">SCREEN</Link>
+                    <Link to="/" className="topLink">MATCH</Link>
+                </div>
+                <Routes>
+                    <Route path="/" element={<div/>}/>
+                </Routes>
+            </BrowserRouter>
         </div>
     );
 }
