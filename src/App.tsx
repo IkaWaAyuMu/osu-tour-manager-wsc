@@ -3,7 +3,7 @@ import serverConfig from "./config/config.json";
 import { Children, useEffect, useState } from "react";
 
 import { Link, Routes, Route, BrowserRouter } from "react-router-dom";
-import OsuTourManagerWebSocket from "./class/osuTourManagerWebSocket";
+import OsuTourManagerWebSocket from "./classes/osuTourManagerWebSocket";
 
 const socket: OsuTourManagerWebSocket = new OsuTourManagerWebSocket(serverConfig.webSocketServer);
 
@@ -15,7 +15,7 @@ export default function App() {
             console.log("Successfully Connected");
             socket.send(JSON.stringify({command: "TEST"}));
             socket.sendStrictMessage({message: "getMappool"});
-            socket.sendStrictMessage({message: "getMapMod", MapID: 1295717});
+            socket.sendStrictMessage({message: "getMapMod", mapID: 1295717});
         };
         socket.onclose = event => {
             console.log("Socket Closed Connection: ", event);
