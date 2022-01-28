@@ -14,8 +14,8 @@ export default function App() {
         socket.onopen = () => {
             console.log("Successfully Connected");
             socket.send(JSON.stringify({command: "TEST"}));
-            socket.sendStrictMessage({message: "getMappool"});
-            socket.sendStrictMessage({message: "getMapMod", mapID: 1295717});
+            socket.sendStrictMessage({message: "getTourData"});
+            socket.sendStrictMessage({message: "getMapMod", mapID: "1295717"});
         };
         socket.onclose = event => {
             console.log("Socket Closed Connection: ", event);
