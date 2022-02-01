@@ -31,11 +31,9 @@ export default function App() {
         socket.onmessage = (e) => {
             console.log(`Recieved: ${e.data}`);
             const temp: OsuTourManagerWebSocketServerSendMessage = JSON.parse(e.data);
-            if (temp.message === "fetchTourData") socket.sendStrictMessage({ message: "getTourData" })
-            if (temp.message === "getTourData" && temp.tourData !== undefined) setFetchedData(temp.tourData);
+            if (temp.message === "fetchTourData" && temp.status === 0) socket.sendStrictMessage({ message: "getTourData" })
+            if (temp.message === "getTourData" && temp.status === 0 && temp.tourData !== undefined) setFetchedData(temp.tourData);
         }
-
-        return () => socket.OPEN && socket.close();
     });
 
     return (
@@ -57,10 +55,11 @@ export default function App() {
                                     <RoundSelect fetchedData={fetchedData} setIndexFunction={setRoundSelect}/>
                                 </div>
                                 <div style={{ margin: "10px 10px 10px 10px", width: "90%", display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
-                                    <div style={{ color: "white" }}>Round</div>
+                                    <div style={{ color: "white" }}>Match</div>
                                     <div>|||||</div>
                                     {<MatchSelect fetchedData={fetchedData} index={roundSelect}/>}
                                 </div>
+                                <button style={{ margin: "10px 80px 10px 80px", width: "200px", borderRadius: "5px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }} onClick={() => socket.sendStrictMessage({ message: "setMatch", match: Matchvalue(fetchedData)})}>set match</button>
                             </div>
                         } />
                         { /* Draft */}
@@ -100,4 +99,11 @@ function MatchSelect(props :{fetchedData: TourData[], index: number}) {
         matchOptions.push(<option key={count++} value={match.match}>{match.match}</option>);
     })
     return (<select name="match" style={{ width: "200px", borderRadius: "5px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }}>{matchOptions}</select>);
+}
+
+function Matchvalue(tourData: TourData[]) {
+    if (tourData[(document.getElementsByName("round")[0] as HTMLSelectElement).selectedIndex] === undefined) return {round: "" ,match: ""};
+    const round = tourData[(document.getElementsByName("round")[0] as HTMLSelectElement).selectedIndex]
+    if (round.matches[(document.getElementsByName("match")[0] as HTMLSelectElement).selectedIndex] === undefined) return {round: round.round, match: ""};
+    return {round: round.round, match: round.matches[(document.getElementsByName("match")[0] as HTMLSelectElement).selectedIndex].match};
 }
