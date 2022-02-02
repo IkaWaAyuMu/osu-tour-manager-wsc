@@ -33,6 +33,7 @@ export default function App() {
             const temp: OsuTourManagerWebSocketServerSendMessage = JSON.parse(e.data);
             if (temp.message === "fetchTourData" && temp.status === 0) socket.sendStrictMessage({ message: "getTourData" })
             if (temp.message === "getTourData" && temp.status === 0 && temp.tourData !== undefined) setFetchedData(temp.tourData);
+            if (temp.message === "setMatch") socket.sendStrictMessage({ message: "getMatch" });
         }
     });
 
