@@ -6,7 +6,8 @@
         "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
-        "eject": "react-scripts eject"
+        "eject": "react-scripts eject",
+	"deploy": "http-server ./build --proxy http://localhost:8051? -p 8051"
     },
     "author": "IkaWaAyuMu",
     "license": "MIT",
