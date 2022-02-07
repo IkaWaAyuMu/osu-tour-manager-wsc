@@ -31,8 +31,8 @@ export default function App() {
             console.log(`Recieved: ${e.data}`);
             const temp: OsuTourManagerWebSocketServerSendMessage = JSON.parse(e.data);
             if (temp.message === "getTourData" && temp.status === 0 && temp.tourData !== undefined) setFetchedData(temp.tourData);
-            if (temp.message === "setMatchIndex" && temp.status <= 1 && temp.status >=0) socket.sendStrictMessage({ message: "getMatchIndex" });
-            if (temp.message === "getMatchIndex" && (temp.status === 0 || temp.status === 4) && temp.matchIndex !== undefined) setMatchIndex(temp.matchIndex);
+            else if (temp.message === "setMatchIndex" && temp.status <= 1 && temp.status >=0) socket.sendStrictMessage({ message: "getMatchIndex" });
+            else if (temp.message === "getMatchIndex" && (temp.status === 0 || temp.status === 4) && temp.matchIndex !== undefined) setMatchIndex(temp.matchIndex);
         }
     });
 
