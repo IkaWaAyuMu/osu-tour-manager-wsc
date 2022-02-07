@@ -64,25 +64,25 @@ export default function App() {
                                 <div style={{color: "white", margin: "10px 10px 10px 10px", width: "90%", display: "flex", alignItems: "flex-start", flexDirection: "column" }}>
                                     {matchIndex.round >= 0 && matchIndex.round < fetchedData.length && 
                                         <div>Round : { fetchedData[matchIndex.round].round} </div>}
-                                    {matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length &&
+                                    {matchIndex.round >= 0 && matchIndex.round < fetchedData.length && matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length &&
                                         <div>Match : { fetchedData[matchIndex.round].matches[matchIndex.match].match} </div>}
-                                    {matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length &&
+                                    {matchIndex.round >= 0 && matchIndex.round < fetchedData.length && matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length &&
                                         <div>Time : { fetchedData[matchIndex.round].matches[matchIndex.match].dateTime} </div>}
-                                    {matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].leftSide !== undefined &&
+                                    {matchIndex.round >= 0 && matchIndex.round < fetchedData.length && matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].leftSide !== undefined &&
                                         <div>LeftSide : { fetchedData[matchIndex.round].matches[matchIndex.match].leftSide} </div>}
-                                    {matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].rightSide !== undefined &&
+                                    {matchIndex.round >= 0 && matchIndex.round < fetchedData.length && matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].rightSide !== undefined &&
                                         <div>RightSide : { fetchedData[matchIndex.round].matches[matchIndex.match].rightSide} </div>}
-                                    {matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].referee !== undefined &&
+                                    {matchIndex.round >= 0 && matchIndex.round < fetchedData.length && matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].referee !== undefined &&
                                         <div>Referee : { fetchedData[matchIndex.round].matches[matchIndex.match].referee} </div>}
-                                    {matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].streamer !== undefined &&
+                                    {matchIndex.round >= 0 && matchIndex.round < fetchedData.length && matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].streamer !== undefined &&
                                         <div>Streamer : { fetchedData[matchIndex.round].matches[matchIndex.match].streamer} </div>}
-                                    {matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].comms1 !== undefined &&
+                                    {matchIndex.round >= 0 && matchIndex.round < fetchedData.length && matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].comms1 !== undefined &&
                                         <div>1st Comms : { fetchedData[matchIndex.round].matches[matchIndex.match].comms1} </div>}
-                                    {matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].comms2 !== undefined &&
+                                    {matchIndex.round >= 0 && matchIndex.round < fetchedData.length && matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].comms2 !== undefined &&
                                         <div>2nd comms : { fetchedData[matchIndex.round].matches[matchIndex.match].comms2} </div>}
-                                    {matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].leftScore !== undefined &&
+                                    {matchIndex.round >= 0 && matchIndex.round < fetchedData.length && matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].leftScore !== undefined &&
                                         <div>LeftScore : { fetchedData[matchIndex.round].matches[matchIndex.match].leftScore} </div>}
-                                    {matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].rightScore !== undefined &&
+                                    {matchIndex.round >= 0 && matchIndex.round < fetchedData.length && matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].rightScore !== undefined &&
                                         <div>RightScore : { fetchedData[matchIndex.round].matches[matchIndex.match].rightScore} </div>}
                                 </div>
                             </div>
