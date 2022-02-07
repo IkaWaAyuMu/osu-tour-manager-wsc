@@ -5,11 +5,8 @@ import { Link, Routes, Route, BrowserRouter } from "react-router-dom";
 import OsuTourManagerWebSocket from "./classes/osuTourManagerWebSocket";
 import TourData from "./interfaces/tourData";
 import OsuTourManagerWebSocketServerSendMessage from "./interfaces/OsuTourManagerWebSocketServerSendMessage";
-import { match } from "assert";
 
 const socket: OsuTourManagerWebSocket = new OsuTourManagerWebSocket(serverConfig.webSocketServer);
-
-let count = 0;
 
 type setNumberFunction = (arg: number) => void;
 
@@ -110,23 +107,23 @@ function RoundSelect(props :{fetchedData: TourData[], setIndexFunction: setNumbe
         if (select === undefined) return;
         setIndexFunction(select.selectedIndex-2);
     }
-    if (fetchedData.length <= 0) return (<select name="round" style={{ width: "200px", borderRadius: "5px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }}><option key={count++} value={-1}>Please apply fetch</option></select>);
+    if (fetchedData.length <= 0) return (<select name="round" style={{ width: "200px", borderRadius: "5px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }}><option key={"R-2"} value={-1}>Please apply fetch</option></select>);
     const roundOptions: JSX.Element[] = [];
     fetchedData.map(((tourData, index) => {
-        roundOptions.push(<option key={count++} value={index}>{tourData.round}</option>);
+        roundOptions.push(<option key={"R" + index} value={index}>{tourData.round}</option>);
     }))
-    return (<select name="round" style={{ width: "200px", borderRadius: "5px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white"}} onChange={setIndex} ><option key={count++} value={-1}>Please select</option><option disabled>──────────</option>{roundOptions}</select>);
+    return (<select name="round" style={{ width: "200px", borderRadius: "5px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white"}} onChange={setIndex} ><option key={"R-1"} value={-1}>Please select</option><option disabled>──────────</option>{roundOptions}</select>);
 }
 
 function MatchSelect(props :{fetchedData: TourData[], index: number}) {
     const {fetchedData, index} = props;
-    if (fetchedData.length <= 0) return (<select name="match" style={{ width: "200px", borderRadius: "5px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }}><option key={count++} value={-1}>Please apply fetch</option></select>);
+    if (fetchedData.length <= 0) return (<select name="match" style={{ width: "200px", borderRadius: "5px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }}><option key={"M-2"} value={-1}>Please apply fetch</option></select>);
     const matchOptions: JSX.Element[] = [];
     if (index < 0) return (<select name="match" style={{ width: "200px", borderRadius: "5px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }}></select>);
     fetchedData[index].matches.map((match, index) => {
-        matchOptions.push(<option key={count++} value={index}>{match.match}</option>);
+        matchOptions.push(<option key={"M" + index} value={index}>{match.match}</option>);
     })
-    return (<select name="match" style={{ width: "200px", borderRadius: "5px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }}><option key={count++} value={-1}>Please select</option><option disabled>──────────</option>{matchOptions}</select>);
+    return (<select name="match" style={{ width: "200px", borderRadius: "5px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }}><option key={"M-1"} value={-1}>Please select</option><option disabled>──────────</option>{matchOptions}</select>);
 }
 
 function Matchvalue(tourData: TourData[]) {
