@@ -5,6 +5,7 @@ import { Link, Routes, Route, BrowserRouter } from "react-router-dom";
 import OsuTourManagerWebSocket from "./classes/osuTourManagerWebSocket";
 import TourData from "./interfaces/tourData";
 import OsuTourManagerWebSocketServerSendMessage from "./interfaces/OsuTourManagerWebSocketServerSendMessage";
+import { match } from "assert";
 
 const socket: OsuTourManagerWebSocket = new OsuTourManagerWebSocket(serverConfig.webSocketServer);
 
@@ -16,6 +17,7 @@ export default function App() {
 
     const [fetchedData, setFetchedData] = useState<TourData[]>([]);
     const [roundSelect, setRoundSelect] = useState(0);
+    const [matchIndex, setMatchIndex] = useState({round: -1, match: -1})
 
     useEffect((): any => {
 
@@ -32,7 +34,8 @@ export default function App() {
             console.log(`Recieved: ${e.data}`);
             const temp: OsuTourManagerWebSocketServerSendMessage = JSON.parse(e.data);
             if (temp.message === "getTourData" && temp.status === 0 && temp.tourData !== undefined) setFetchedData(temp.tourData);
-            if (temp.message === "setMatchIndex") socket.sendStrictMessage({ message: "getMatchIndex" });
+            if (temp.message === "setMatchIndex" && temp.status <= 1 && temp.status >=0) socket.sendStrictMessage({ message: "getMatchIndex" });
+            if (temp.message === "getMatchIndex" && (temp.status === 0 || temp.status === 4) && temp.matchIndex !== undefined) setMatchIndex(temp.matchIndex);
         }
     });
 
@@ -61,8 +64,32 @@ export default function App() {
                                     {<MatchSelect fetchedData={fetchedData} index={roundSelect}/>}
                                 </div>
                                 <button style={{ margin: "10px 80px 10px 80px", width: "200px", borderRadius: "5px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }} onClick={() => socket.sendStrictMessage({ message: "setMatchIndex", matchIndex: Matchvalue(fetchedData)})}>set match</button>
+                                <div style={{color: "white", margin: "10px 10px 10px 10px", width: "90%", display: "flex", alignItems: "flex-start", flexDirection: "column" }}>
+                                    {matchIndex.round >= 0 && matchIndex.round < fetchedData.length && 
+                                        <div>Round : { fetchedData[matchIndex.round].round} </div>}
+                                    {matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length &&
+                                        <div>Match : { fetchedData[matchIndex.round].matches[matchIndex.match].match} </div>}
+                                    {matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length &&
+                                        <div>Time : { fetchedData[matchIndex.round].matches[matchIndex.match].dateTime} </div>}
+                                    {matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].leftSide !== undefined &&
+                                        <div>LeftSide : { fetchedData[matchIndex.round].matches[matchIndex.match].leftSide} </div>}
+                                    {matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].rightSide !== undefined &&
+                                        <div>RightSide : { fetchedData[matchIndex.round].matches[matchIndex.match].rightSide} </div>}
+                                    {matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].referee !== undefined &&
+                                        <div>RightSide : { fetchedData[matchIndex.round].matches[matchIndex.match].referee} </div>}
+                                    {matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].streamer !== undefined &&
+                                        <div>RightSide : { fetchedData[matchIndex.round].matches[matchIndex.match].streamer} </div>}
+                                    {matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].comms1 !== undefined &&
+                                        <div>RightSide : { fetchedData[matchIndex.round].matches[matchIndex.match].comms1} </div>}
+                                    {matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].comms2 !== undefined &&
+                                        <div>RightSide : { fetchedData[matchIndex.round].matches[matchIndex.match].comms2} </div>}
+                                    {matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].leftScore !== undefined &&
+                                        <div>LeftSide : { fetchedData[matchIndex.round].matches[matchIndex.match].leftScore} </div>}
+                                    {matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].rightScore !== undefined &&
+                                        <div>RightSide : { fetchedData[matchIndex.round].matches[matchIndex.match].rightScore} </div>}
+                                </div>
                             </div>
-                        } />
+                        }/>
                         { /* Draft */}
                         <Route path="/draft" element={
                             <div>
