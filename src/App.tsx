@@ -73,17 +73,17 @@ export default function App() {
                                     {matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].rightSide !== undefined &&
                                         <div>RightSide : { fetchedData[matchIndex.round].matches[matchIndex.match].rightSide} </div>}
                                     {matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].referee !== undefined &&
-                                        <div>RightSide : { fetchedData[matchIndex.round].matches[matchIndex.match].referee} </div>}
+                                        <div>Referee : { fetchedData[matchIndex.round].matches[matchIndex.match].referee} </div>}
                                     {matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].streamer !== undefined &&
-                                        <div>RightSide : { fetchedData[matchIndex.round].matches[matchIndex.match].streamer} </div>}
+                                        <div>Streamer : { fetchedData[matchIndex.round].matches[matchIndex.match].streamer} </div>}
                                     {matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].comms1 !== undefined &&
-                                        <div>RightSide : { fetchedData[matchIndex.round].matches[matchIndex.match].comms1} </div>}
+                                        <div>1st Comms : { fetchedData[matchIndex.round].matches[matchIndex.match].comms1} </div>}
                                     {matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].comms2 !== undefined &&
-                                        <div>RightSide : { fetchedData[matchIndex.round].matches[matchIndex.match].comms2} </div>}
+                                        <div>2nd comms : { fetchedData[matchIndex.round].matches[matchIndex.match].comms2} </div>}
                                     {matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].leftScore !== undefined &&
-                                        <div>LeftSide : { fetchedData[matchIndex.round].matches[matchIndex.match].leftScore} </div>}
+                                        <div>LeftScore : { fetchedData[matchIndex.round].matches[matchIndex.match].leftScore} </div>}
                                     {matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].rightScore !== undefined &&
-                                        <div>RightSide : { fetchedData[matchIndex.round].matches[matchIndex.match].rightScore} </div>}
+                                        <div>RightScore : { fetchedData[matchIndex.round].matches[matchIndex.match].rightScore} </div>}
                                 </div>
                             </div>
                         }/>
