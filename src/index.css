@@ -8,8 +8,16 @@
     src: local('Inter-ExtraBold'), url(./fonts/Inter-ExtraBold.otf) format('truetype');
 }
 
+@font-face {
+    font-family: 'Inter-Regular';
+    src: local('Inter-Regular'), url(./fonts/Inter-Regular.otf) format('truetype');
+}
+
 body {
+    margin: 0%;
     background-color: gray;
+    font-size: 15px;
+    font-family: "Inter-ExtraBold";
 }
 
 #top {
@@ -26,7 +34,6 @@ body {
     width: 360px;
     height: 590px;
     background-color: black;
-    font-family: "Inter-ExtraBold";
 }
 
 .topLink {
