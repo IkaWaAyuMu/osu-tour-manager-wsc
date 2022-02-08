@@ -6,6 +6,7 @@ import { Textfit }  from "react-textfit";
 import OsuTourManagerWebSocket from "./classes/osuTourManagerWebSocket";
 import TourData from "./interfaces/tourData";
 import OsuTourManagerWebSocketServerSendMessage from "./interfaces/OsuTourManagerWebSocketServerSendMessage";
+import { stringify } from "querystring";
 
 const socket: OsuTourManagerWebSocket = new OsuTourManagerWebSocket(serverConfig.webSocketServer);
 
@@ -101,6 +102,8 @@ export default function App() {
                                 {matchIndex.round >= 0 && matchIndex.round < fetchedData.length && matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length &&
                                     <button style={{ margin: "5px 10% 10px 10%", width: "80%", borderRadius: "10px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }}>Set placeholder</button>}
                                 <DraftMaps tourData={fetchedData} matchIndex={matchIndex} currentMapIndex={mapIndex} setMapIndexFunction={setMapIndex}/>
+                                {matchIndex.round >= 0 && matchIndex.round < fetchedData.length && matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length &&
+                                    <button disabled={mapIndex >= 0  && mapIndex < fetchedData[matchIndex.round].maps.length} style={{ margin: "5px 10% 10px 10%", width: "80%", borderRadius: "10px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }}>{action.toUpperCase()}!</button>}
                             </div>
                         } />
                     </Routes>
