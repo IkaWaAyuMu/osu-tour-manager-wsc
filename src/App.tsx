@@ -53,8 +53,8 @@ export default function App() {
                         { /* Setup */}
                         <Route path="/" element={
                             <div>
-                                <button style={{ margin: "10px 80px 5px 80px", width: "200px", borderRadius: "5px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }} onClick={() => socket.sendStrictMessage({ message: "fetchTourData" })}>refetch</button>
-                                <button style={{ margin: "5px 80px 10px 80px", width: "200px", borderRadius: "5px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }} onClick={() => socket.sendStrictMessage({ message: "getTourData" })}>apply fetched</button>
+                                <button style={{ margin: "10px 10% 0px 10%", width: "80%", borderRadius: "10px 10px 0px 0px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }} onClick={() => socket.sendStrictMessage({ message: "fetchTourData" })}>refetch</button>
+                                <button style={{ margin: "0px 10% 10px 10%", width: "80%", borderRadius: "0px 0px 10px 10px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }} onClick={() => socket.sendStrictMessage({ message: "getTourData" })}>apply fetched</button>
                                 <div style={{ margin: "10px 10px 10px 10px", width: "90%", display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
                                     <div style={{ color: "white" }}>Round</div>
                                     <div>|||||</div>
@@ -65,7 +65,7 @@ export default function App() {
                                     <div>|||||</div>
                                     {<MatchSelect fetchedData={fetchedData} index={roundSelect} />}
                                 </div>
-                                <button style={{ margin: "10px 80px 10px 80px", width: "200px", borderRadius: "5px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }} onClick={() => socket.sendStrictMessage({ message: "setMatchIndex", matchIndex: Matchvalue(fetchedData) })}>set match</button>
+                                <button style={{ margin: "10px 10% 10px 10%", width: "80%", borderRadius: "10px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }} onClick={() => socket.sendStrictMessage({ message: "setMatchIndex", matchIndex: Matchvalue(fetchedData) })}>set match</button>
                                 <div style={{ color: "white", margin: "10px 10px 10px 10px", width: "90%", display: "flex", alignItems: "flex-start", flexDirection: "column" }}>
                                     {matchIndex.round >= 0 && matchIndex.round < fetchedData.length &&
                                         <div>Round : {fetchedData[matchIndex.round].round} </div>}
@@ -97,6 +97,8 @@ export default function App() {
                             <div>
                                 <DraftSide tourData={fetchedData} matchIndex={matchIndex} currentSide={actionSide} setSideFunction={setActionSide} />
                                 <DraftAction tourData={fetchedData} matchIndex={matchIndex} currentAction={action} setActionFunction={setAction} />
+                                {matchIndex.round >= 0 && matchIndex.round < fetchedData.length && matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length &&
+                                    <button style={{ margin: "5px 10% 10px 10%", width: "80%", borderRadius: "10px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }}>Set placeholder</button>}
                             </div>
                         } />
                     </Routes>
