@@ -20,6 +20,7 @@ export default function App() {
     const [matchIndex, setMatchIndex] = useState({ round: -1, match: -1 });
     const [actionSide, setActionSide] = useState<"left" | "right">("left");
     const [action, setAction] = useState<"pick" | "ban">("ban");
+    const [mapIndex, setMapIndex] = useState(-1);
 
     useEffect((): any => {
 
@@ -99,7 +100,7 @@ export default function App() {
                                 <DraftAction tourData={fetchedData} matchIndex={matchIndex} currentAction={action} setActionFunction={setAction} />
                                 {matchIndex.round >= 0 && matchIndex.round < fetchedData.length && matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length &&
                                     <button style={{ margin: "5px 10% 10px 10%", width: "80%", borderRadius: "10px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }}>Set placeholder</button>}
-                                <DraftMaps tourData={fetchedData} matchIndex={matchIndex}/>
+                                <DraftMaps tourData={fetchedData} matchIndex={matchIndex} currentMapIndex={mapIndex} setMapIndexFunction={setMapIndex}/>
                             </div>
                         } />
                     </Routes>
@@ -171,13 +172,14 @@ function DraftAction(props: { tourData: TourData[], matchIndex: { round: number,
     );
 }
 
-function DraftMaps(props: { tourData: TourData[], matchIndex: { round: number, match: number }}) {
-    const { tourData, matchIndex, } = props;
-    if (matchIndex.round < 0 || matchIndex.round >= tourData.length) return <div/>;
-    if (matchIndex.match < 0 || matchIndex.round >= tourData[matchIndex.round].matches.length) return <div/>;
+function DraftMaps(props: { tourData: TourData[], matchIndex: { round: number, match: number }, currentMapIndex: number, setMapIndexFunction: setNumberFunction}) {
+    const { tourData, matchIndex, currentMapIndex, setMapIndexFunction} = props;
+    if (matchIndex.round < 0 || matchIndex.round >= tourData.length) { setMapIndexFunction(-1); return <div/>;}
+    if (matchIndex.match < 0 || matchIndex.round >= tourData[matchIndex.round].matches.length) { setMapIndexFunction(-1); return <div/>;}
+    if (currentMapIndex >= tourData[matchIndex.round].maps.length) setMapIndexFunction(-1);
     const maps: JSX.Element[] = []
     tourData[matchIndex.round].maps.map((map, index) => {
-        maps.push(<button key={"Map"+index} style={{margin:"1%", width: "23%", height: "50px", borderRadius: "10px", fontSize: "25px", backgroundColor: "#8F8F8FFF" , color: "white" }}><Textfit mode="single" max={25}>{map.mod}</Textfit></button>);
+        maps.push(<button key={"Map"+index} style={{margin:"1%", width: "23%", height: "50px", borderRadius: "10px", fontSize: "25px", backgroundColor: currentMapIndex === index ? "#C7C7C7" : "#8F8F8FFF" , color: "white" }} onClick={() => setMapIndexFunction(index)}><Textfit mode="single" max={25}>{map.mod}</Textfit></button>);
     })
     return (
         <div style={{margin: "0px 10px 10px 10px", width: "90%", display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "center"}}>
