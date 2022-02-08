@@ -2,6 +2,7 @@ import serverConfig from "./config/config.json";
 
 import { useEffect, useState } from "react";
 import { Link, Routes, Route, BrowserRouter } from "react-router-dom";
+import { Textfit }  from "react-textfit";
 import OsuTourManagerWebSocket from "./classes/osuTourManagerWebSocket";
 import TourData from "./interfaces/tourData";
 import OsuTourManagerWebSocketServerSendMessage from "./interfaces/OsuTourManagerWebSocketServerSendMessage";
@@ -14,7 +15,7 @@ export default function App() {
 
     const [fetchedData, setFetchedData] = useState<TourData[]>([]);
     const [roundSelect, setRoundSelect] = useState(0);
-    const [matchIndex, setMatchIndex] = useState({round: -1, match: -1})
+    const [matchIndex, setMatchIndex] = useState({ round: -1, match: -1 });
 
     useEffect((): any => {
 
@@ -31,7 +32,7 @@ export default function App() {
             console.log(`Recieved: ${e.data}`);
             const temp: OsuTourManagerWebSocketServerSendMessage = JSON.parse(e.data);
             if (temp.message === "getTourData" && temp.status === 0 && temp.tourData !== undefined) setFetchedData(temp.tourData);
-            else if (temp.message === "setMatchIndex" && temp.status <= 1 && temp.status >=0) socket.sendStrictMessage({ message: "getMatchIndex" });
+            else if (temp.message === "setMatchIndex" && temp.status <= 1 && temp.status >= 0) socket.sendStrictMessage({ message: "getMatchIndex" });
             else if (temp.message === "getMatchIndex" && (temp.status === 0 || temp.status === 4) && temp.matchIndex !== undefined) setMatchIndex(temp.matchIndex);
         }
     });
@@ -53,44 +54,45 @@ export default function App() {
                                 <div style={{ margin: "10px 10px 10px 10px", width: "90%", display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
                                     <div style={{ color: "white" }}>Round</div>
                                     <div>|||||</div>
-                                    <RoundSelect fetchedData={fetchedData} setIndexFunction={setRoundSelect}/>
+                                    <RoundSelect fetchedData={fetchedData} setIndexFunction={setRoundSelect} />
                                 </div>
                                 <div style={{ margin: "10px 10px 10px 10px", width: "90%", display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
                                     <div style={{ color: "white" }}>Match</div>
                                     <div>|||||</div>
-                                    {<MatchSelect fetchedData={fetchedData} index={roundSelect}/>}
+                                    {<MatchSelect fetchedData={fetchedData} index={roundSelect} />}
                                 </div>
-                                <button style={{ margin: "10px 80px 10px 80px", width: "200px", borderRadius: "5px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }} onClick={() => socket.sendStrictMessage({ message: "setMatchIndex", matchIndex: Matchvalue(fetchedData)})}>set match</button>
-                                <div style={{color: "white", margin: "10px 10px 10px 10px", width: "90%", display: "flex", alignItems: "flex-start", flexDirection: "column" }}>
-                                    {matchIndex.round >= 0 && matchIndex.round < fetchedData.length && 
-                                        <div>Round : { fetchedData[matchIndex.round].round} </div>}
+                                <button style={{ margin: "10px 80px 10px 80px", width: "200px", borderRadius: "5px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }} onClick={() => socket.sendStrictMessage({ message: "setMatchIndex", matchIndex: Matchvalue(fetchedData) })}>set match</button>
+                                <div style={{ color: "white", margin: "10px 10px 10px 10px", width: "90%", display: "flex", alignItems: "flex-start", flexDirection: "column" }}>
+                                    {matchIndex.round >= 0 && matchIndex.round < fetchedData.length &&
+                                        <div>Round : {fetchedData[matchIndex.round].round} </div>}
                                     {matchIndex.round >= 0 && matchIndex.round < fetchedData.length && matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length &&
-                                        <div>Match : { fetchedData[matchIndex.round].matches[matchIndex.match].match} </div>}
+                                        <div>Match : {fetchedData[matchIndex.round].matches[matchIndex.match].match} </div>}
                                     {matchIndex.round >= 0 && matchIndex.round < fetchedData.length && matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length &&
-                                        <div>Time : { fetchedData[matchIndex.round].matches[matchIndex.match].dateTime} </div>}
+                                        <div>Time : {fetchedData[matchIndex.round].matches[matchIndex.match].dateTime} </div>}
                                     {matchIndex.round >= 0 && matchIndex.round < fetchedData.length && matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].leftSide !== undefined &&
-                                        <div>LeftSide : { fetchedData[matchIndex.round].matches[matchIndex.match].leftSide} </div>}
+                                        <div>LeftSide : {fetchedData[matchIndex.round].matches[matchIndex.match].leftSide} </div>}
                                     {matchIndex.round >= 0 && matchIndex.round < fetchedData.length && matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].rightSide !== undefined &&
-                                        <div>RightSide : { fetchedData[matchIndex.round].matches[matchIndex.match].rightSide} </div>}
+                                        <div>RightSide : {fetchedData[matchIndex.round].matches[matchIndex.match].rightSide} </div>}
                                     {matchIndex.round >= 0 && matchIndex.round < fetchedData.length && matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].referee !== undefined &&
-                                        <div>Referee : { fetchedData[matchIndex.round].matches[matchIndex.match].referee} </div>}
+                                        <div>Referee : {fetchedData[matchIndex.round].matches[matchIndex.match].referee} </div>}
                                     {matchIndex.round >= 0 && matchIndex.round < fetchedData.length && matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].streamer !== undefined &&
-                                        <div>Streamer : { fetchedData[matchIndex.round].matches[matchIndex.match].streamer} </div>}
+                                        <div>Streamer : {fetchedData[matchIndex.round].matches[matchIndex.match].streamer} </div>}
                                     {matchIndex.round >= 0 && matchIndex.round < fetchedData.length && matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].comms1 !== undefined &&
-                                        <div>1st Comms : { fetchedData[matchIndex.round].matches[matchIndex.match].comms1} </div>}
+                                        <div>1st Comms : {fetchedData[matchIndex.round].matches[matchIndex.match].comms1} </div>}
                                     {matchIndex.round >= 0 && matchIndex.round < fetchedData.length && matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].comms2 !== undefined &&
-                                        <div>2nd comms : { fetchedData[matchIndex.round].matches[matchIndex.match].comms2} </div>}
+                                        <div>2nd comms : {fetchedData[matchIndex.round].matches[matchIndex.match].comms2} </div>}
                                     {matchIndex.round >= 0 && matchIndex.round < fetchedData.length && matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].leftScore !== undefined &&
-                                        <div>LeftScore : { fetchedData[matchIndex.round].matches[matchIndex.match].leftScore} </div>}
+                                        <div>LeftScore : {fetchedData[matchIndex.round].matches[matchIndex.match].leftScore} </div>}
                                     {matchIndex.round >= 0 && matchIndex.round < fetchedData.length && matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length && fetchedData[matchIndex.round].matches[matchIndex.match].rightScore !== undefined &&
-                                        <div>RightScore : { fetchedData[matchIndex.round].matches[matchIndex.match].rightScore} </div>}
+                                        <div>RightScore : {fetchedData[matchIndex.round].matches[matchIndex.match].rightScore} </div>}
                                 </div>
                             </div>
-                        }/>
+                        } />
                         { /* Draft */}
                         <Route path="/draft" element={
                             <div>
-
+                                <DraftSide tourData={fetchedData} matchIndex={matchIndex} />
+                                <DraftAction tourData={fetchedData} matchIndex={matchIndex} />
                             </div>
                         } />
                     </Routes>
@@ -100,23 +102,23 @@ export default function App() {
     );
 }
 
-function RoundSelect(props :{fetchedData: TourData[], setIndexFunction: setNumberFunction}) {
-    const {fetchedData, setIndexFunction} = props;
+function RoundSelect(props: { fetchedData: TourData[], setIndexFunction: setNumberFunction }) {
+    const { fetchedData, setIndexFunction } = props;
     function setIndex(): void {
         const select = document.getElementsByName("round")[0] as HTMLSelectElement;
         if (select === undefined) return;
-        setIndexFunction(select.selectedIndex-2);
+        setIndexFunction(select.selectedIndex - 2);
     }
     if (fetchedData.length <= 0) return (<select name="round" style={{ width: "200px", borderRadius: "5px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }}><option key={"R-2"} value={-1}>Please apply fetch</option></select>);
     const roundOptions: JSX.Element[] = [];
     fetchedData.map(((tourData, index) => {
         roundOptions.push(<option key={"R" + index} value={index}>{tourData.round}</option>);
     }))
-    return (<select name="round" style={{ width: "200px", borderRadius: "5px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white"}} onChange={setIndex} ><option key={"R-1"} value={-1}>Please select</option><option disabled>──────────</option>{roundOptions}</select>);
+    return (<select name="round" style={{ width: "200px", borderRadius: "5px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }} onChange={setIndex} ><option key={"R-1"} value={-1}>Please select</option><option disabled>──────────</option>{roundOptions}</select>);
 }
 
-function MatchSelect(props :{fetchedData: TourData[], index: number}) {
-    const {fetchedData, index} = props;
+function MatchSelect(props: { fetchedData: TourData[], index: number }) {
+    const { fetchedData, index } = props;
     if (fetchedData.length <= 0) return (<select name="match" style={{ width: "200px", borderRadius: "5px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }}><option key={"M-2"} value={-1}>Please apply fetch</option></select>);
     const matchOptions: JSX.Element[] = [];
     if (index < 0) return (<select name="match" style={{ width: "200px", borderRadius: "5px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }}></select>);
@@ -127,11 +129,38 @@ function MatchSelect(props :{fetchedData: TourData[], index: number}) {
 }
 
 function Matchvalue(tourData: TourData[]) {
-    if (parseInt((document.getElementsByName("round")[0] as HTMLSelectElement).value) === undefined) return {round: -1 ,match: -1};
+    if (parseInt((document.getElementsByName("round")[0] as HTMLSelectElement).value) === undefined) return { round: -1, match: -1 };
     const roundIndex = parseInt((document.getElementsByName("round")[0] as HTMLSelectElement).value);
-    if (roundIndex < 0 || roundIndex >= tourData.length) return {round: -1 ,match: -1};
-    if (parseInt((document.getElementsByName("match")[0] as HTMLSelectElement).value) === undefined) return {round: roundIndex ,match: -1};
+    if (roundIndex < 0 || roundIndex >= tourData.length) return { round: -1, match: -1 };
+    if (parseInt((document.getElementsByName("match")[0] as HTMLSelectElement).value) === undefined) return { round: roundIndex, match: -1 };
     const matchIndex = parseInt((document.getElementsByName("match")[0] as HTMLSelectElement).value);
-    if (matchIndex < 0 || matchIndex >= tourData[roundIndex].matches.length) return {round: roundIndex ,match: -1};
-    return {round: roundIndex ,match: matchIndex};
+    if (matchIndex < 0 || matchIndex >= tourData[roundIndex].matches.length) return { round: roundIndex, match: -1 };
+    return { round: roundIndex, match: matchIndex };
+}
+
+//-------------------------------------------------------------------------
+
+function DraftSide(props: { tourData: TourData[], matchIndex: { round: number, match: number } }) {
+    const { tourData, matchIndex } = props;
+    if (matchIndex.round < 0 || matchIndex.round >= tourData.length) return <div style={{  margin: "0px 10px 10px 0px", color: "white", fontSize: "50px", textAlign: "center"  }}>No match chosen</div>;
+    if (matchIndex.match < 0 || matchIndex.round >= tourData[matchIndex.round].matches.length) return <div style={{  margin: "0px 10px 10px 0px", color: "white", fontSize: "50px", textAlign: "center" }}>No match chosen</div>;
+    return (
+        <div style={{margin: "0px 10px 0px 10px", width: "90%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <button style={{ width: "50%", height: "35px", borderRadius: "10px 0px 0px 0px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }}><Textfit mode="single" max={25}>{tourData[matchIndex.round].matches[matchIndex.match].leftSide}</Textfit></button>
+            <button style={{ width: "50%", height: "35px", borderRadius: "0px 10px 0px 0px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }}><Textfit mode="single" max={25}>{tourData[matchIndex.round].matches[matchIndex.match].rightSide}</Textfit></button>
+        </div>
+    );
+}
+
+function DraftAction(props: { tourData: TourData[], matchIndex: { round: number, match: number } }) {
+    const { tourData, matchIndex } = props;
+    if (matchIndex.round < 0 || matchIndex.round >= tourData.length) return <div/>;
+    if (matchIndex.match < 0 || matchIndex.round >= tourData[matchIndex.round].matches.length) return <div/>;
+    return (
+        <div style={{margin: "0px 10px 10px 10px", width: "90%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <button style={{ width: "50%", height: "35px", borderRadius: "0px 0px 0px 10px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }}>Pick</button>
+            <button style={{ width: "50%", height: "35px", borderRadius: "0px 0px 10px 0px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }}>Ban</button>
+        </div>
+
+    );
 }
