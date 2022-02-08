@@ -10,12 +10,16 @@ import OsuTourManagerWebSocketServerSendMessage from "./interfaces/OsuTourManage
 const socket: OsuTourManagerWebSocket = new OsuTourManagerWebSocket(serverConfig.webSocketServer);
 
 type setNumberFunction = (arg: number) => void;
+type setSideFunction = (arg: "left" | "right") => void;
+type setActionFunction = (arg: "pick" | "ban") => void;
 
 export default function App() {
 
     const [fetchedData, setFetchedData] = useState<TourData[]>([]);
     const [roundSelect, setRoundSelect] = useState(0);
     const [matchIndex, setMatchIndex] = useState({ round: -1, match: -1 });
+    const [actionSide, setActionSide] = useState<"left" | "right">("left");
+    const [action, setAction] = useState<"pick" | "ban">("ban");
 
     useEffect((): any => {
 
@@ -91,8 +95,8 @@ export default function App() {
                         { /* Draft */}
                         <Route path="/draft" element={
                             <div>
-                                <DraftSide tourData={fetchedData} matchIndex={matchIndex} />
-                                <DraftAction tourData={fetchedData} matchIndex={matchIndex} />
+                                <DraftSide tourData={fetchedData} matchIndex={matchIndex} currentSide={actionSide} setSideFunction={setActionSide} />
+                                <DraftAction tourData={fetchedData} matchIndex={matchIndex} currentAction={action} setActionFunction={setAction} />
                             </div>
                         } />
                     </Routes>
@@ -140,26 +144,26 @@ function Matchvalue(tourData: TourData[]) {
 
 //-------------------------------------------------------------------------
 
-function DraftSide(props: { tourData: TourData[], matchIndex: { round: number, match: number } }) {
-    const { tourData, matchIndex } = props;
+function DraftSide(props: { tourData: TourData[], matchIndex: { round: number, match: number }, currentSide: "left" | "right", setSideFunction: setSideFunction }) {
+    const { tourData, matchIndex, currentSide, setSideFunction } = props;
     if (matchIndex.round < 0 || matchIndex.round >= tourData.length) return <div style={{  margin: "0px 10px 10px 0px", color: "white", fontSize: "50px", textAlign: "center"  }}>No match chosen</div>;
     if (matchIndex.match < 0 || matchIndex.round >= tourData[matchIndex.round].matches.length) return <div style={{  margin: "0px 10px 10px 0px", color: "white", fontSize: "50px", textAlign: "center" }}>No match chosen</div>;
     return (
         <div style={{margin: "0px 10px 0px 10px", width: "90%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <button style={{ width: "50%", height: "35px", borderRadius: "10px 0px 0px 0px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }}><Textfit mode="single" max={25}>{tourData[matchIndex.round].matches[matchIndex.match].leftSide}</Textfit></button>
-            <button style={{ width: "50%", height: "35px", borderRadius: "0px 10px 0px 0px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }}><Textfit mode="single" max={25}>{tourData[matchIndex.round].matches[matchIndex.match].rightSide}</Textfit></button>
+            <button style={{ width: "50%", height: "35px", borderRadius: "10px 0px 0px 0px", fontSize: "25px", backgroundColor: currentSide === "left" ? "#C7C7C7" : "#8F8F8FFF" , color: "white" }} onClick={() => setSideFunction("left")}><Textfit mode="single" max={25}>{tourData[matchIndex.round].matches[matchIndex.match].leftSide}</Textfit></button>
+            <button style={{ width: "50%", height: "35px", borderRadius: "0px 10px 0px 0px", fontSize: "25px", backgroundColor: currentSide === "right" ? "#C7C7C7" : "#8F8F8FFF", color: "white" }} onClick={() => setSideFunction("right")}><Textfit mode="single" max={25}>{tourData[matchIndex.round].matches[matchIndex.match].rightSide}</Textfit></button>
         </div>
     );
 }
 
-function DraftAction(props: { tourData: TourData[], matchIndex: { round: number, match: number } }) {
-    const { tourData, matchIndex } = props;
+function DraftAction(props: { tourData: TourData[], matchIndex: { round: number, match: number }, currentAction: "pick" | "ban", setActionFunction : setActionFunction }) {
+    const { tourData, matchIndex, currentAction, setActionFunction } = props;
     if (matchIndex.round < 0 || matchIndex.round >= tourData.length) return <div/>;
     if (matchIndex.match < 0 || matchIndex.round >= tourData[matchIndex.round].matches.length) return <div/>;
     return (
         <div style={{margin: "0px 10px 10px 10px", width: "90%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <button style={{ width: "50%", height: "35px", borderRadius: "0px 0px 0px 10px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }}>Pick</button>
-            <button style={{ width: "50%", height: "35px", borderRadius: "0px 0px 10px 0px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }}>Ban</button>
+            <button style={{ width: "50%", height: "35px", borderRadius: "0px 0px 0px 10px", fontSize: "25px", backgroundColor: currentAction === "pick" ? "#C7C7C7" : "#8F8F8FFF", color: "white"  }} onClick={() => setActionFunction("pick")}>Pick</button>
+            <button style={{ width: "50%", height: "35px", borderRadius: "0px 0px 10px 0px", fontSize: "25px", backgroundColor: currentAction === "ban" ? "#C7C7C7" : "#8F8F8FFF", color: "white" }} onClick={() => setActionFunction("ban")}>Ban</button>
         </div>
 
     );
