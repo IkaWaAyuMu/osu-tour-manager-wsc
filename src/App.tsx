@@ -6,7 +6,7 @@ import { Textfit }  from "react-textfit";
 import OsuTourManagerWebSocket from "./classes/osuTourManagerWebSocket";
 import TourData from "./interfaces/tourData";
 import OsuTourManagerWebSocketServerSendMessage from "./interfaces/OsuTourManagerWebSocketServerSendMessage";
-import { stringify } from "querystring";
+import DraftData from "./interfaces/draftData";
 
 const socket: OsuTourManagerWebSocket = new OsuTourManagerWebSocket(serverConfig.webSocketServer);
 
@@ -19,6 +19,7 @@ export default function App() {
     const [fetchedData, setFetchedData] = useState<TourData[]>([]);
     const [roundSelect, setRoundSelect] = useState(0);
     const [matchIndex, setMatchIndex] = useState({ round: -1, match: -1 });
+    const [draftData, setDraftData] = useState<DraftData[]>();
     const [actionSide, setActionSide] = useState<"left" | "right">("left");
     const [action, setAction] = useState<"pick" | "ban">("ban");
     const [mapIndex, setMapIndex] = useState(-1);
@@ -40,6 +41,8 @@ export default function App() {
             if (temp.message === "getTourData" && temp.status === 0 && temp.tourData !== undefined) setFetchedData(temp.tourData);
             else if (temp.message === "setMatchIndex" && temp.status <= 1 && temp.status >= 0) socket.sendStrictMessage({ message: "getMatchIndex" });
             else if (temp.message === "getMatchIndex" && (temp.status === 0 || temp.status === 4) && temp.matchIndex !== undefined) setMatchIndex(temp.matchIndex);
+            else if (temp.message === "appendDraftAction" && temp.status === 0) socket.sendStrictMessage({ message : "getDraftData"});
+            else if (temp.message === "getDraftData" && temp.status === 0 && temp.draftData !== undefined) setDraftData(temp.draftData);
         }
     });
 
@@ -59,12 +62,10 @@ export default function App() {
                                 <button style={{ margin: "0px 10% 10px 10%", width: "80%", borderRadius: "0px 0px 10px 10px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }} onClick={() => socket.sendStrictMessage({ message: "getTourData" })}>apply fetched</button>
                                 <div style={{ margin: "10px 10px 10px 10px", width: "90%", display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
                                     <div style={{ color: "white" }}>Round</div>
-                                    <div>|||||</div>
                                     <RoundSelect fetchedData={fetchedData} setIndexFunction={setRoundSelect} />
                                 </div>
                                 <div style={{ margin: "10px 10px 10px 10px", width: "90%", display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
                                     <div style={{ color: "white" }}>Match</div>
-                                    <div>|||||</div>
                                     {<MatchSelect fetchedData={fetchedData} index={roundSelect} />}
                                 </div>
                                 <button style={{ margin: "10px 10% 10px 10%", width: "80%", borderRadius: "10px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }} onClick={() => socket.sendStrictMessage({ message: "setMatchIndex", matchIndex: Matchvalue(fetchedData) })}>set match</button>
@@ -100,10 +101,11 @@ export default function App() {
                                 <DraftSide tourData={fetchedData} matchIndex={matchIndex} currentSide={actionSide} setSideFunction={setActionSide} />
                                 <DraftAction tourData={fetchedData} matchIndex={matchIndex} currentAction={action} setActionFunction={setAction} />
                                 {matchIndex.round >= 0 && matchIndex.round < fetchedData.length && matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length &&
-                                    <button style={{ margin: "5px 10% 10px 10%", width: "80%", borderRadius: "10px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }}>Set placeholder</button>}
+                                    <button style={{ margin: "5px 10% 10px 10%", width: "80%", borderRadius: "10px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }} onClick={() => socket.sendStrictMessage({message: "appendDraftAction", draftAction: {side: actionSide, action: action, mapIndex: "PLACEHOLDER"}})}>Set placeholder</button>}
                                 <DraftMaps tourData={fetchedData} matchIndex={matchIndex} currentMapIndex={mapIndex} setMapIndexFunction={setMapIndex}/>
                                 {matchIndex.round >= 0 && matchIndex.round < fetchedData.length && matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length &&
-                                    <button disabled={mapIndex >= 0  && mapIndex < fetchedData[matchIndex.round].maps.length} style={{ margin: "5px 10% 10px 10%", width: "80%", borderRadius: "10px", fontSize: "25px", backgroundColor: "#8F8F8FFF", color: "white" }}>{action.toUpperCase()}!</button>}
+                                    <button disabled={!(mapIndex >= 0 && mapIndex < fetchedData[matchIndex.round].maps.length)} style={{ margin: "5px 10% 10px 10%", width: "80%", borderRadius: "10px", fontSize: "25px", backgroundColor: mapIndex >= 0  && mapIndex < fetchedData[matchIndex.round].maps.length ? "#8F8F8FFF" : "#0F0F0FFF", color: "white" }} onClick={() => socket.sendStrictMessage({message: "appendDraftAction", draftAction: {side: actionSide, action: action, mapIndex: mapIndex}})}>{action.toUpperCase()}!</button>}
+                                {draftData !== undefined && <div style={{ color: "white", margin: "10px 10px 10px 10px", width: "90%"}}>{draftData.toString()}</div>}
                             </div>
                         } />
                     </Routes>
