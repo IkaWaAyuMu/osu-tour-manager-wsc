@@ -7,7 +7,6 @@ import OsuTourManagerWebSocket from "./classes/osuTourManagerWebSocket";
 import TourData from "./interfaces/tourData";
 import OsuTourManagerWebSocketServerSendMessage from "./interfaces/OsuTourManagerWebSocketServerSendMessage";
 import DraftData from "./interfaces/draftData";
-import sendStrictMessage from "./interfaces/OsuTourManagerWebSocketServer";
 
 const socket: OsuTourManagerWebSocket = new OsuTourManagerWebSocket(serverConfig.webSocketServer);
 
