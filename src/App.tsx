@@ -28,6 +28,7 @@ export default function App() {
 
         socket.onopen = () => {
             console.log("Successfully Connected");
+            socket.sendStrictMessage({ message: "getTourData" });
         };
         socket.onclose = event => {
             console.log("Socket Closed Connection: ", event);
