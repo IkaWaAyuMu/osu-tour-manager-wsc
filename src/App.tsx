@@ -7,6 +7,7 @@ import OsuTourManagerWebSocket from "./classes/osuTourManagerWebSocket";
 import TourData from "./interfaces/tourData";
 import OsuTourManagerWebSocketServerSendMessage from "./interfaces/OsuTourManagerWebSocketServerSendMessage";
 import DraftData from "./interfaces/draftData";
+import sendStrictMessage from "./interfaces/OsuTourManagerWebSocketServer";
 
 const socket: OsuTourManagerWebSocket = new OsuTourManagerWebSocket(serverConfig.webSocketServer);
 
@@ -44,9 +45,7 @@ export default function App() {
                 socket.sendStrictMessage({ message: "getMatchIndex" });
                 socket.sendStrictMessage({ message : "getDraftData"});
             }
-            else if (temp.message === "setMatchIndex" && temp.status <= 1 && temp.status >= 0) socket.sendStrictMessage({ message: "getMatchIndex" });
             else if (temp.message === "getMatchIndex" && (temp.status === 0 || temp.status === 4) && temp.matchIndex !== undefined) setMatchIndex(temp.matchIndex);
-            else if (temp.message === "appendDraftAction" && temp.status === 0) socket.sendStrictMessage({ message : "getDraftData"});
             else if (temp.message === "getDraftData" && temp.status === 0 && temp.draftData !== undefined) setDraftData(temp.draftData);
         }
     });
@@ -110,7 +109,8 @@ export default function App() {
                                 <DraftMaps tourData={fetchedData} matchIndex={matchIndex} currentMapIndex={mapIndex} setMapIndexFunction={setMapIndex}/>
                                 {matchIndex.round >= 0 && matchIndex.round < fetchedData.length && matchIndex.match >= 0 && matchIndex.match < fetchedData[matchIndex.round].matches.length &&
                                     <button disabled={!(mapIndex >= 0 && mapIndex < fetchedData[matchIndex.round].maps.length)} style={{ margin: "5px 10% 10px 10%", width: "80%", borderRadius: "10px", fontSize: "25px", backgroundColor: mapIndex >= 0  && mapIndex < fetchedData[matchIndex.round].maps.length ? "#8F8F8FFF" : "#0F0F0FFF", color: "white" }} onClick={() => socket.sendStrictMessage({message: "appendDraftAction", draftAction: {side: actionSide, action: action, mapIndex: mapIndex}})}>{action.toUpperCase()}!</button>}
-                                {draftData !== undefined && <div style={{ color: "white", margin: "10px 10px 10px 10px", width: "90%"}}>{draftData.toString()}</div>}
+                                {draftData !== undefined && 
+                                    <DraftActionList tourData={fetchedData} matchIndex={matchIndex} draftData={draftData} deleteDraftActionFunction={(n) => socket.sendStrictMessage({message: "deleteDraftActionIndex", draftActionIndex: n})}/>}
                             </div>
                         } />
                     </Routes>
@@ -189,11 +189,30 @@ function DraftMaps(props: { tourData: TourData[], matchIndex: { round: number, m
     if (currentMapIndex >= tourData[matchIndex.round].maps.length) setMapIndexFunction(-1);
     const maps: JSX.Element[] = []
     tourData[matchIndex.round].maps.map((map, index) => {
-        maps.push(<button key={"Map"+index} style={{margin:"1%", width: "23%", height: "50px", borderRadius: "10px", fontSize: "25px", backgroundColor: currentMapIndex === index ? "#C7C7C7" : "#8F8F8FFF" , color: "white" }} onClick={() => setMapIndexFunction(index)}><Textfit mode="single" max={25}>{map.mod}</Textfit></button>);
+        maps.push(<button key={"Map"+index} style={{margin:"1%", width:"55px", height: "35px", borderRadius: "10px", backgroundColor: currentMapIndex === index ? "#C7C7C7" : "#8F8F8FFF" , color: "white" }} onClick={() => setMapIndexFunction(index)}><Textfit mode="single" max={20}>{map.mod}</Textfit></button>);
     })
     return (
-        <div style={{margin: "0px 10px 10px 10px", width: "90%", display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "center"}}>
+        <div style={{margin: "0px 10px 10px 10px", height: "175px", width: "90%", display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "center", alignContent: "flex-start", overflowY: "auto"}}>
             {maps}
+        </div>
+    );
+}
+
+function DraftActionList(props: { tourData: TourData[], matchIndex: { round: number, match: number }, draftData: DraftData[], deleteDraftActionFunction: setNumberFunction}) {
+    const {tourData, matchIndex, draftData, deleteDraftActionFunction} = props;
+    if (matchIndex.round < 0 || matchIndex.round >= tourData.length) return <div/>;
+    const lists: JSX.Element[] = [];
+    draftData.map((action, index) => {
+        lists.unshift(
+            <div style={{height: "25px", display: "flex", justifyContent: "space-between", alignContent: "center", marginLeft: "10px"}}>
+                <div style={{width: "275px"}}><Textfit mode="single" max={20}>{`${action.side === "left" ? tourData[matchIndex.round].matches[matchIndex.match].leftSide : tourData[matchIndex.round].matches[matchIndex.match].rightSide} ${action.action} ${action.mapIndex === "PLACEHOLDER" ? "PLACEHOLDER": tourData[matchIndex.round].maps[action.mapIndex].mod}`}</Textfit></div>
+                <button style={{ width: "25px", height: "25px", borderRadius: "7.5px", fontSize: "15px", backgroundColor: "#8F8F8FFF", color: "white"}} onClick={() => deleteDraftActionFunction(index)}>X</button>
+            </div>
+        )
+    })
+    return (
+        <div style={{height: "200px", width: "90%", backgroundColor: "#404040FF", borderRadius: "5px", margin: "0px 10px 10px 10px", display: "flex", flexDirection: "column", overflowY: "scroll"}}>
+            {lists}
         </div>
     );
 }
