@@ -43,3 +43,36 @@ body {
     color: white;
     text-decoration: none;
 }
+
+
+/* Scrollbar */
+
+
+/* width */
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+
+/* Track */
+
+ ::-webkit-scrollbar-track {
+    background: rgb(120, 120, 120);
+    border-radius: 5px;
+}
+
+
+/* Handle */
+
+ ::-webkit-scrollbar-thumb {
+    background: #FFFFFFFF;
+    border-radius: 5px;
+}
+
+
+/* Handle on hover */
+
+ ::-webkit-scrollbar-thumb:hover {
+    background: rgb(180, 180, 180);
+}
