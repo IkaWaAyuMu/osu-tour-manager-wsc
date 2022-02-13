@@ -1,4 +1,3 @@
-[
 {
   "test": ".tsx?$",
   "jsc": {
@@ -9,16 +8,4 @@
       "dynamicImport": true
     }
   }
-},
-{
-  "test": ".jsx?$",
-  "jsc": {
-    "parser": {
-      "syntax": "ecmascript",
-      "jsx": true,
-      "decorators": false,
-      "dynamicImport": true
-    }
-  }
 }
-]
