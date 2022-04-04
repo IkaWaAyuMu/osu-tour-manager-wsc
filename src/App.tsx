@@ -160,8 +160,7 @@ function Matchvalue(tourData: TourData[]) {
 function DraftSide(props: { tourData: TourData[], matchIndex: { round: number, match: number }, currentSide: "left" | "right", setSideFunction: setSideFunction }) {
     const { tourData, matchIndex, currentSide, setSideFunction } = props;
     if (matchIndex.round < 0 || matchIndex.round >= tourData.length) return <div style={{  margin: "0px 10px 10px 0px", color: "white", fontSize: "50px", textAlign: "center"  }}>No match chosen</div>;
-    if (matchIndex.match < 0 || matchIndex.round >= tourData[matchIndex.round].matches.length) return <div style={{  margin: "0px 10px 10px 0px", color: "white", fontSize: "50px", textAlign: "center" }}>No match chosen</div>;
-    return (
+    if (matchIndex.match < 0 || matchIndex.match >= tourData[matchIndex.round].matches.length) return <div style={{  margin: "0px 10px 10px 0px", color: "white", fontSize: "50px", textAlign: "center" }}>No match chosen</div>;    return (
         <div style={{margin: "0px 10px 0px 10px", width: "90%", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <button style={{ width: "50%", height: "35px", borderRadius: "10px 0px 0px 0px", fontSize: "25px", backgroundColor: currentSide === "left" ? "#C7C7C7" : "#8F8F8FFF" , color: "white" }} onClick={() => setSideFunction("left")}><Textfit mode="single" max={25}>{tourData[matchIndex.round].matches[matchIndex.match].leftSide}</Textfit></button>
             <button style={{ width: "50%", height: "35px", borderRadius: "0px 10px 0px 0px", fontSize: "25px", backgroundColor: currentSide === "right" ? "#C7C7C7" : "#8F8F8FFF", color: "white" }} onClick={() => setSideFunction("right")}><Textfit mode="single" max={25}>{tourData[matchIndex.round].matches[matchIndex.match].rightSide}</Textfit></button>
@@ -172,7 +171,7 @@ function DraftSide(props: { tourData: TourData[], matchIndex: { round: number, m
 function DraftAction(props: { tourData: TourData[], matchIndex: { round: number, match: number }, currentAction: "pick" | "ban", setActionFunction : setActionFunction }) {
     const { tourData, matchIndex, currentAction, setActionFunction } = props;
     if (matchIndex.round < 0 || matchIndex.round >= tourData.length) return <div/>;
-    if (matchIndex.match < 0 || matchIndex.round >= tourData[matchIndex.round].matches.length) return <div/>;
+    if (matchIndex.match < 0 || matchIndex.match >= tourData[matchIndex.round].matches.length) return <div/>;
     return (
         <div style={{margin: "0px 10px 10px 10px", width: "90%", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <button style={{ width: "50%", height: "35px", borderRadius: "0px 0px 0px 10px", fontSize: "25px", backgroundColor: currentAction === "pick" ? "#C7C7C7" : "#8F8F8FFF", color: "white"  }} onClick={() => setActionFunction("pick")}>Pick</button>
@@ -184,7 +183,7 @@ function DraftAction(props: { tourData: TourData[], matchIndex: { round: number,
 function DraftMaps(props: { tourData: TourData[], matchIndex: { round: number, match: number }, currentMapIndex: number, setMapIndexFunction: setNumberFunction}) {
     const { tourData, matchIndex, currentMapIndex, setMapIndexFunction} = props;
     if (matchIndex.round < 0 || matchIndex.round >= tourData.length) { setMapIndexFunction(-1); return <div/>;}
-    if (matchIndex.match < 0 || matchIndex.round >= tourData[matchIndex.round].matches.length) { setMapIndexFunction(-1); return <div/>;}
+    if (matchIndex.match < 0 || matchIndex.match >= tourData[matchIndex.round].matches.length) { setMapIndexFunction(-1); return <div/>;}
     if (currentMapIndex >= tourData[matchIndex.round].maps.length) setMapIndexFunction(-1);
     const maps: JSX.Element[] = []
     tourData[matchIndex.round].maps.map((map, index) => {
